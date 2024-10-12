@@ -9,9 +9,9 @@ export default class AddUseCase {
         readonly tokenService: TokenInterface,
         readonly encriptService: EncriptInterface,
         readonly authRepository: AuthRepository
-    ){}
+    ) { }
 
-    async run (auth: AuthRequest): Promise<AuthResponse | null> {
+    async run(auth: AuthRequest): Promise<AuthResponse | null> {
         try {
             auth.password = this.encriptService.hash(auth.password);
             const result = await this.authRepository.add(auth);
@@ -19,11 +19,9 @@ export default class AddUseCase {
             if (!result) return null;
 
             const response: AuthResponse = {
-                data:{
-                    id: result.id,
-                    email: result.email,
-                    name: result.name
-                },
+                id: result.id,
+                email: result.email,
+                name: result.name,
                 token: this.tokenService.generateToken(auth)
             }
 
@@ -33,7 +31,7 @@ export default class AddUseCase {
             console.log('Hubo un error en el servidor');
             return null
         }
-       
+
 
     }
 
