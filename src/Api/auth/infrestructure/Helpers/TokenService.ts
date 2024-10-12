@@ -7,7 +7,7 @@ import dotenv from "dotenv"
 dotenv.config();
 
 export default class TokenService implements TokenInterface {
-    constructor ( readonly auth: AuthRequest){}
+
 
     generateToken(auth: AuthRequest): string {
         return jwt.sign({
