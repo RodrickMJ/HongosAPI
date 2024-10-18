@@ -3,6 +3,7 @@ import Auth from "../domain/Auth";
 import AuthRepository from "../domain/AuthRepository";
 import UserModel from "./Models/UserModel";
 import UUIDInterface from "../aplication/service/UUIDInterface";
+import ChangePasswordRequest from "../domain/DTOS/ChangePasswordRequest";
 
 export default class MysqlRepository implements AuthRepository{
     constructor(
@@ -57,6 +58,23 @@ export default class MysqlRepository implements AuthRepository{
         console.log(error);
         return null
        } 
+    }
+
+   async changePassword(changePassword: ChangePasswordRequest): Promise<Boolean> {
+        try {
+            const isExistedUser = await this.model.findOne({
+                where: {
+                    email: changePassword.email,
+                    name: changePassword.name
+                }
+            })
+
+           return isExistedUser ?  true : false    
+        
+        } catch (error) {
+            console.log('Internal Server')
+            return false
+        }
     }
 
     private async isExistedEmail(email: string): Promise<Auth | null>{
