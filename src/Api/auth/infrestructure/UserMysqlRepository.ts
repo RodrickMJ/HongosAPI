@@ -3,29 +3,30 @@ import Auth from "../domain/Auth";
 import AuthRepository from "../domain/AuthRepository";
 import UserModel from "./Models/UserModel";
 import UUIDInterface from "../aplication/service/UUIDInterface";
-import ChangePasswordRequest from "../domain/DTOS/ChangePasswordRequest";
+import UpdatePasswordRequest from "../domain/DTOS/UpdatePasswordRequest";
 
-export default class MysqlRepository implements AuthRepository{
+export default class MysqlRepository implements AuthRepository {
     constructor(
         readonly model: typeof UserModel,
         readonly generateUuid: UUIDInterface
-    ){
-        this.model.sync();
+    ) {
+        this.model.sync({alter: true});
     }
 
-  async access(auth: AuthRequest): Promise<Auth | null> {
+    async access(auth: AuthRequest): Promise<Auth | null> {
         try {
             const user = await this.model.findOne({
-                where: {email: auth.email, name: auth.name}
+                where: { email: auth.email, name: auth.name }
             });
 
-            if(user === null) return null;
+            if (user === null) return null;
 
             return {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                password: user.password
+                password: user.password,
+                rol: user.rol
             }
 
         } catch (error) {
@@ -35,72 +36,33 @@ export default class MysqlRepository implements AuthRepository{
         }
     }
 
-  async add(auth: AuthRequest): Promise<Auth | null> {
-       try {
-        const email_registered = await this.isExistedEmail(auth.email);
+    async changePassword(updatePassword: UpdatePasswordRequest): Promise<String> {
 
-        if (email_registered === null){
-            const newUser = await this.model.create({
-                name: auth.name,
-                email: auth.email,
-                password: auth.password,
-                id: this.generateUuid.get_uuid()
-            })
-
-            return newUser
-
-        } else {
-            return null
-        }
-
-       } catch (error) {
-        console.log('Internal Server Error')
-        console.log(error);
-        return null
-       } 
-    }
-
-   async changePassword(changePassword: ChangePasswordRequest): Promise<Boolean> {
         try {
-            const isExistedUser = await this.model.findOne({
+
+            const update = await this.model.update({ password: updatePassword.newPassword }, {
                 where: {
-                    email: changePassword.email,
-                    name: changePassword.name
+                    email: updatePassword.email,
+                    password: updatePassword.newPassword
                 }
             })
 
-           return isExistedUser ?  true : false    
-        
-        } catch (error) {
-            console.log('Internal Server')
-            return false
-        }
-    }
+            if (!update) {
+                return 'User not found'
+            } else {
+                console.log({ update })
 
-    private async isExistedEmail(email: string): Promise<Auth | null>{
-        try {
-            
-            const result = await this.model.findOne({
-                where: {email: email}
-            });
-
-            if (result === null) return null;
-
-            const response: Auth = {
-                id: result.id,
-                name: result.name,
-                email: result.email,
-                password: result.password
+                return 'Change password is succesfully'
             }
 
-            return response;
-
         } catch (error) {
-            console.log('Error en la consulta');
-            console.error(error);
-            return null;
+            console.log(error)
+            console.log('Internal Server Error');
+            return 'Internal Server Error'
         }
+
     }
+
 
 }
 

@@ -1,7 +1,8 @@
-export default interface Auth {
-    id: string
+
+export default interface IUser {
+    id: string,
     name: string,
     email: string,
-    password: string
+    password: string,
     rol: 'Administrador' | 'Investigador'
 }

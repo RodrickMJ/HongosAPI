@@ -7,6 +7,7 @@ class UserModel extends Model <Auth> implements Auth {
     email!: string;
     password!: string;
     name!: string;
+    rol!: "Administrador" | "Investigador";
 }
 
 UserModel.init({
@@ -26,12 +27,17 @@ UserModel.init({
      password: {
         type: DataTypes.STRING,
         allowNull: false
+     },
+     rol: {
+        type: DataTypes.ENUM,
+        values: ['Administrador', 'Investigador']
      }
 },{
     tableName: 'users',
     timestamps: false,
     sequelize: sequelize_conection
 })
+
 
 
 export default UserModel;

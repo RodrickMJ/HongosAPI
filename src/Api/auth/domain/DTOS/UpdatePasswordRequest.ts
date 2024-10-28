@@ -1,4 +1,4 @@
-export default interface ChangePasswordRequest {
+export default interface UpdatePasswordRequest{
     email: string,
     name: string
     newPassword: string

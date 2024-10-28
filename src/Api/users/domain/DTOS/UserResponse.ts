@@ -1,7 +1,7 @@
-export default interface Auth {
-    id: string
+
+export default interface UserResponse {
+    id: string,
     name: string,
     email: string,
-    password: string
     rol: 'Administrador' | 'Investigador'
 }

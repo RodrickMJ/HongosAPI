@@ -7,17 +7,23 @@ export default class AccessController {
     constructor(readonly auhtUseCase: AccessUseCase){}
 
     async run (req: Request, res: Response){
-        const {name, password, email} = req.body;
+        const {name, password, email}: AuthRequest = req.body;
 
 
-        if (!name || !email || !password) return res.status(400).json({msg: "is required complete fields"})
-            const authRequested: AuthRequest = {
-                name,
-                email,
-                password
-            }
+        if (!name || !email || !password){
+             return res.status(400).json({
+                msg: "is required complete fields",
+                data: null
+            })
+        } 
 
-        const auth_founded = await this.auhtUseCase.run(authRequested);
+          
+        const auth_founded = await this.auhtUseCase.run({
+            email,
+            name,
+            password
+        });
+        
         if (!auth_founded) {
             return res.status(404).json({
                 data: auth_founded,
@@ -29,6 +35,8 @@ export default class AccessController {
             data: auth_founded,
             msg: "Authentication success"
         })
+
+
 
     }
 
