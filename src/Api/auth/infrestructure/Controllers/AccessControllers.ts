@@ -17,25 +17,26 @@ export default class AccessController {
             })
         } 
 
-          
-        const auth_founded = await this.auhtUseCase.run({
-            email,
-            name,
-            password
-        });
-        
-        if (!auth_founded) {
-            return res.status(404).json({
-                data: auth_founded,
-                msg: "Credentials doesn't match"
-            })
+        try {
+           const result = await this.auhtUseCase.run({name, password,email});
+            if (!result) return 
+            
+           const response = result
+           ? { status: 200, msg: 'Access Successfully', data: result }
+           : { status: 404, msg: 'User not found', data: null };
+           
+           return res.status(response.status).json({
+                data: response.data,
+                msg: response.msg
+           })
+
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({
+                data: null,
+                msg: 'Internal Server Error'
+            })    
         }
-
-        return res.status(200).json({
-            data: auth_founded,
-            msg: "Authentication success"
-        })
-
 
 
     }

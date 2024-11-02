@@ -1,43 +1,39 @@
-import { Model, DataTypes } from "sequelize";
+import mongoose, {Document, Schema} from "mongoose";
 import Auth from "../../domain/Auth";
-import sequelize_conection from "../../../Database/ConectionDatabase";
 
-class UserModel extends Model <Auth> implements Auth {
-    id!: string;
-    email!: string;
-    password!: string;
-    name!: string;
-    rol!: "Administrador" | "Investigador";
-}
+interface AuthDocument extends Omit<Auth, 'id'>, Document {}
 
-UserModel.init({
-    id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        primaryKey: true
+const UserSchema = new Schema<AuthDocument>({
+    name: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
     },
     email: {
-        type: DataTypes.STRING(50),
-        allowNull: false
+        type: String,
+        required: true,
+        unique: true
     },
-     name: {
-        type: DataTypes.STRING(50),
-        allowNull: false
-     },
-     password: {
-        type: DataTypes.STRING,
-        allowNull: false
-     },
-     rol: {
-        type: DataTypes.ENUM,
-        values: ['Administrador', 'Investigador']
-     }
-},{
-    tableName: 'users',
-    timestamps: false,
-    sequelize: sequelize_conection
-})
+    rol: {
+        type: String,
+        enum: ['Administrador', 'Investigador'],
+        required: true
+    },
 
+    passwordResetCode: {
+        type: String,
+        required: false
+    },
+    passwordResetExpires: {
+        type: Date,
+        required: false
+    }
+  
+});
 
+const UserModel  = mongoose.model<AuthDocument>('Users',UserSchema );
 
 export default UserModel;

@@ -3,4 +3,5 @@ export default interface AuthResponse {
   name: string;
   email: string;
   token: string;
+  rol: 'Administrador' | 'Investigador'
 }

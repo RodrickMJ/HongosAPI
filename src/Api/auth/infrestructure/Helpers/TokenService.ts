@@ -1,17 +1,14 @@
-import { TryStatement } from './../../../node_modules/acorn/dist/acorn.d';
 import jwt from "jsonwebtoken"
 import TokenInterface from "../../aplication/service/TokenInterface"
-import AuthRequest from "../../domain/DTOS/AuthRequest"
 import dotenv from "dotenv"
 
 dotenv.config();
 
 export default class TokenService implements TokenInterface {
 
-
-    generateToken(auth: AuthRequest): string {
+    generateToken(name: string): string {
         return jwt.sign({
-            name: auth.name
+           name
         },
          process.env['JWT_SECRET'] ?? "DEFAULT_SECRET", 
         {

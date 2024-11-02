@@ -1,30 +1,35 @@
 import AccessUseCase from "../aplication/AccessUseCase";
-import MysqlUserRepository from "./UserMysqlRepository";
+import UserMongoRepository from "./UserMongoRepository";
 import AccessController from "./Controllers/AccessControllers";
+import TokenService from "./Helpers/TokenService";
 import EncriptService from "./Helpers/EncriptService";
-import TokensService from "./Helpers/TokenService";
-import UUIDService from "./Helpers/UUIDService";
 import UserModel from "./Models/UserModel";
-import UpdatePasswordUseCase from "../aplication/UpdatePasswordUseCase";
-import UpdatePasswordController from "./Controllers/UpdatePasswordController";
-export const encryptService = new EncriptService();
-export const uuidService = new UUIDService();
-export const tokenService = new TokensService();
+import FindUserForPasswordResetController from "./Controllers/FindUserForPasswordResetControllers";
+import FindUserForPasswordResetUseCase from "../aplication/FindUserForPasswordResetUseCase";
+import EmailService from "./Helpers/EmailService";
+import VerificationCodeService from "./Helpers/VerificationCodeService";
 
-export const mysqlUserRepository = new MysqlUserRepository(UserModel, uuidService);
+const userMongoRepository = new UserMongoRepository(UserModel);
+const encryptService = new EncriptService()
+const tokenService = new TokenService()
+const emailService = new EmailService();
+const verifyCodeService = new VerificationCodeService();
 
-
-export const accessUseCase = new AccessUseCase(
+const accessUseCase = new AccessUseCase(
     tokenService,
     encryptService,
-    mysqlUserRepository
+    userMongoRepository
 );
 
-export const updatePasswordUseCase = new UpdatePasswordUseCase(mysqlUserRepository, encryptService)
+const findUserForPasswordResetUseCase = new FindUserForPasswordResetUseCase(
+    verifyCodeService,
+    emailService,
+    tokenService,
+    userMongoRepository
+);
 
 
-
-export const accessController = new AccessController(accessUseCase)
-export const updatePasswordController = new UpdatePasswordController(updatePasswordUseCase);
-
-
+export const accessController = new AccessController(accessUseCase);
+export const findUserForPasswordResetController = new FindUserForPasswordResetController(
+    findUserForPasswordResetUseCase
+);

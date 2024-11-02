@@ -13,15 +13,18 @@ export default class AccessUseCase {
 
     async run(auth: AuthRequest): Promise<AuthResponse | null> {
         const authFounded = await this.authRepository.access(auth);
-
         if (!authFounded) return null;
-        if (!this.encriptService.compare(authFounded.password, auth.password)) return null
+
+        const isPasswordValid = await this.encriptService.compare(authFounded.password, auth.password)
+
+        if (!isPasswordValid) return null
 
         const response: AuthResponse = {
-            id: authFounded.id,
+            id: authFounded.id.toString(),
             email: authFounded.email,
             name: authFounded.name,
-            token: this.tokenService.generateToken(auth)
+            rol: authFounded.rol,
+            token: this.tokenService.generateToken(auth.name)
         }
 
         return response;

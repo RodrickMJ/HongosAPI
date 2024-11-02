@@ -1,7 +1,9 @@
 import AuthRequest from "./DTOS/AuthRequest";
 import Auth from "./Auth";
-import UpdatePasswordRequest from "./DTOS/UpdatePasswordRequest";
+import StoragePasswordResetCodeRequest from "./DTOS/StoragePasswordResetCode";
 export default interface AuthRepository {
-    access(auth: AuthRequest): Promise <Auth | null>
-    changePassword(updatePassword: UpdatePasswordRequest): Promise <String>
+    access(auth: AuthRequest): Promise<Auth | null>;
+    storePasswordResetCode(request: StoragePasswordResetCodeRequest): Promise<void>;
+    // verifyCodeAndResetPassword(): Promise<boolean>;
+    findUser(name: string, email: string): Promise<Auth | null>;
 }

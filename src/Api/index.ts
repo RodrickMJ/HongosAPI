@@ -1,21 +1,32 @@
-import express from "express"
+import express from "express";
 import authRouter from "./auth/infrestructure/Routers/authRouter";
-import cors from "cors"
+import cors from "cors";
+import 'dotenv/config';
+import connectToDatabase from "./config/ConectionDatabase";
 
-const Port = parseInt(process.env['PORT'] ?? '3000');
+const Port = parseInt(process.env['APP_PORT'] ?? '3001');
 const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 app.use('/auth', authRouter);
 
 
-app.get('/', (_req, res) => {
-    res.send('Hello World')
-})
+app.get('/', (_req, res) => { res.send('Hello World')});
 
-app.listen( Port, () => {
-    console.clear();
-    console.log('Server Listening on Port', Port)
-})
+async function startServer() {
+    try {
+        console.clear();
+        await connectToDatabase();
 
+        app.listen(Port, () => {
+            console.log('Server Listening on Port', Port);
+        });
+
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+}
+
+startServer();

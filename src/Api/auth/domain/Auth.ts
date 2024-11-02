@@ -4,4 +4,7 @@ export default interface Auth {
     email: string,
     password: string
     rol: 'Administrador' | 'Investigador'
+    passwordResetCode?: string,
+    passwordResetExpires?: Date
+  
 }

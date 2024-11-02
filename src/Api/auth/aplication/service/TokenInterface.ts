@@ -1,6 +1,5 @@
-import AuthRequest from "../../domain/DTOS/AuthRequest";
 
 export default interface TokenInterface {
-    generateToken(auth: AuthRequest): string;
+    generateToken(name: string): string;
     validateToken(token: string): boolean;
 }
