@@ -1,9 +1,9 @@
 import mongoose, {Document, Schema} from "mongoose";
-import Auth from "../../domain/Auth";
+import UserInterface from "./UserInterface";
 
-interface AuthDocument extends Omit<Auth, 'id'>, Document {}
+interface userDocument extends Omit<UserInterface, 'id'>, Document {}
 
-const UserSchema = new Schema<AuthDocument>({
+const UserSchema = new Schema<userDocument>({
     name: {
         type: String,
         required: true
@@ -34,6 +34,6 @@ const UserSchema = new Schema<AuthDocument>({
   
 });
 
-const UserModel  = mongoose.model<AuthDocument>('Users',UserSchema );
+const UserModel  = mongoose.model<userDocument>('Users',UserSchema );
 
 export default UserModel;

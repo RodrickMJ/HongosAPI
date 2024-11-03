@@ -6,4 +6,5 @@ export default interface AuthRepository {
     storePasswordResetCode(request: StoragePasswordResetCodeRequest): Promise<void>;
     // verifyCodeAndResetPassword(): Promise<boolean>;
     findUser(name: string, email: string): Promise<Auth | null>;
+    add(auth: AuthRequest):Promise<Auth | null>
 }

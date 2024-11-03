@@ -19,8 +19,7 @@ export default class AccessController {
 
         try {
            const result = await this.auhtUseCase.run({name, password,email});
-            if (!result) return 
-            
+                       
            const response = result
            ? { status: 200, msg: 'Access Successfully', data: result }
            : { status: 404, msg: 'User not found', data: null };

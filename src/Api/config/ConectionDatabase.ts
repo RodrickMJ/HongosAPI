@@ -3,9 +3,10 @@ import 'dotenv/config';
 
 const MONGODB_HOST = process.env['MONGODB_HOST'] || '';
 const PORT_DATABASE = process.env['PORT_DATABASE'] || '';
-const MONGODB_DATABASE = process.env['MONGODB_DATABASE'] || '';
+const MONGODB_DATABASE = process.env['NAME_DATABASE'] || '';
 
 const MongoUrl = `mongodb://${MONGODB_HOST}:${PORT_DATABASE}/${MONGODB_DATABASE}`;
+
 
 export default async function connectToDatabase() {
     try {
