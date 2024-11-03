@@ -81,4 +81,15 @@ export default class UserMongoRepository implements UserRepository {
         }
     }
 
+    async deleteByPk(pk: string): Promise<boolean> {
+        try {
+            const deletedUser = await this.model.findOneAndDelete({ _id: pk });
+            return deletedUser !== null; 
+        } catch (error) {
+            console.error('Error trying to delete user from database:', error);
+            throw new Error('Error accessing database');
+        }
+    }
+    
+
 }

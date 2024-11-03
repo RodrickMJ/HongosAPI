@@ -1,20 +1,25 @@
 import { Router } from "express";
 import {
     addController,
-    getByPkController,
     listController,
+    deleteController,
     autMiddleware,
     fieldValidatorMiddleware
-
 } from "../Dependencies"
 
 const router = Router();
-router.get('/', autMiddleware.run.bind(autMiddleware),listController.run.bind(listController));
-router.get('/:id', autMiddleware.run.bind(autMiddleware), getByPkController.run.bind(getByPkController));
 
-router.post('/create',
-    fieldValidatorMiddleware.runAdd.bind(fieldValidatorMiddleware),
-    addController.run.bind(addController)
-);
+router.get('/:id',
+    autMiddleware.run.bind(autMiddleware),
+    listController.run.bind(listController));
+
+router.delete('/:id',
+    autMiddleware.run.bind(autMiddleware),
+    deleteController.run.bind(deleteController));
+
+router.post('/create/:id',
+    fieldValidatorMiddleware.run.bind(fieldValidatorMiddleware),
+    autMiddleware.run.bind(autMiddleware),
+    addController.run.bind(addController));
 
 export default router;

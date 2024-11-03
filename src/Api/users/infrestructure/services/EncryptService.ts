@@ -7,4 +7,4 @@ export default class EncryptService implements EncriptInterface {
             password,
             parseInt(process.env['SALT_ROUNDS'] ?? '5'))
     }
-}
+} 
