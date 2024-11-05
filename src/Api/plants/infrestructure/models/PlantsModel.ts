@@ -22,7 +22,7 @@ const PlantsSchema = new Schema <plantsDocument>({
     },
 
     readinds: [{
-        type:   Schema.Types.ObjectId,
+        type:  Schema.Types.ObjectId,
         ref: 'Readings'
     }]
     
