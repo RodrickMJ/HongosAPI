@@ -31,7 +31,7 @@ export default class UserMongoRepository implements UserRepository {
 
         } catch (error) {
             console.error('Error trying to add user to database:', error);
-            throw new Error('Error accessing database');
+            throw new Error('Error adding user to database. Please try again.');
         }
     }
 
@@ -43,7 +43,7 @@ export default class UserMongoRepository implements UserRepository {
 
         } catch (error) {
             console.error('Error trying to search for user in database:', error);
-            throw new Error('Error accessing database');
+            throw new Error(`Error retrieving user with id: ${pk}.`);
         }
     }
 
@@ -57,7 +57,7 @@ export default class UserMongoRepository implements UserRepository {
 
         } catch (error) {
             console.error('Error trying to search for users in database:', error);
-            throw new Error('Error accessing database');
+            throw new Error('Error retrieving users from database.');
         }
     }
 
@@ -77,7 +77,7 @@ export default class UserMongoRepository implements UserRepository {
 
         } catch (error) {
             console.error('Error trying to search for user in database:', error);
-            throw new Error('Error accessing database');
+            throw new Error(`Error finding user with name: ${name} and email: ${email}.`);
         }
     }
 
@@ -87,9 +87,11 @@ export default class UserMongoRepository implements UserRepository {
             return deletedUser !== null; 
         } catch (error) {
             console.error('Error trying to delete user from database:', error);
-            throw new Error('Error accessing database');
+            throw new Error(`Error deleting user with id: ${pk}.`);
         }
     }
-    
+
+  
+
 
 }

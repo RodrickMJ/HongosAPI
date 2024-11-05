@@ -10,6 +10,13 @@ export default class AddController {
             const {name, type}:PlantsRequest = req.body;
             const result = await this.addUseCase.run({ name, type});
 
+            if (!result){
+                return res.status(400).json({
+                    data: null,
+                    msg: 'The Plants is registered'
+                })
+            }
+
             return res.status(201).json({
                 data: result,
                 msg: 'create new plants succefully'

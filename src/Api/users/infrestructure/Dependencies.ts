@@ -10,8 +10,9 @@ import EncryptService from "./services/EncryptService";
 import FieldValidatorUtils from "./utils/FieldValidatorUtils";
 import FieldValidator from "./middlewares/verifyFields";
 import AuthMiddleware from "./middlewares/Auth";
-import DeleteUseCase from "../aplication/deleteUseCase";
+import DeleteUseCase from "../aplication/DeleteUseCase";
 import DeleteController from "./controllers/DeleteContoller";
+
 
 const userMongoRepository = new UserMongoRepository(UserModel);
 const encryptService = new EncryptService();
@@ -23,6 +24,7 @@ const listUseCase = new ListUseCase(userMongoRepository);
 const getByPkUseCase = new GetByPkUseCase(userMongoRepository);
 const deleteUseCase = new DeleteUseCase(userMongoRepository);
 
+
 //middlewares
 export const fieldValidatorMiddleware = new FieldValidator(fieldValidator);
 export const autMiddleware = new AuthMiddleware(tokenService, getByPkUseCase);
@@ -30,4 +32,5 @@ export const autMiddleware = new AuthMiddleware(tokenService, getByPkUseCase);
 //controllers
 export const addController = new AddController(addUseCase);
 export const listController = new ListController(listUseCase);
-export const deleteController = new DeleteController(deleteUseCase)
+export const deleteController = new DeleteController(deleteUseCase);
+

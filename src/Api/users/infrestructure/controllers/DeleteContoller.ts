@@ -1,4 +1,4 @@
-import DeleteUseCase from "../../aplication/deleteUseCase";
+import DeleteUseCase from "../../aplication/DeleteUseCase";
 import { Request, Response } from "express";
 
 export default class DeleteController {
