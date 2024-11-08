@@ -34,4 +34,4 @@ const readinsSchema = new Schema<Ireadings>({
 
 });
 
-const ReadinsModel = mongoose.model('Readings', readinsSchema)
+export const ReadinsModel = mongoose.model('Readings', readinsSchema)

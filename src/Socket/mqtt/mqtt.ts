@@ -1,13 +1,17 @@
-
 import client from "../config/MqttConexion";
 import { Server } from "socket.io";
-
-
+import SensorsDataRequest from "../interfaces/DTOS/Sensors/DataRequest";
+const topic = 'BioReact/Sensors';
 
 export const setUpMqtt = (io: Server) => {
-    const topic = 'BioReact/Sensors'
+    const tenMinutes = 10 * 60 * 1000;
+    
+    let latestMessage: SensorsDataRequest = {
+        hidrogen: 0, oxygen: 0, ph: 0, temperature: 0
+    };
+
     client.on('connect', () => {
-        console.log('Conected to has broker MQTT');
+        console.log('Conectado al broker MQTT');
 
         client.subscribe(topic, (error) => {
             if (!error) {
@@ -15,18 +19,25 @@ export const setUpMqtt = (io: Server) => {
             } else {
                 console.error('Error al suscribirse:', error);
             }
-        })
+        });
+    });
+
+    client.on('message', (topic: string, message: Buffer) => {
+        try {
+            latestMessage = JSON.parse(message.toString()) as SensorsDataRequest;
+            console.log(latestMessage);
+            io.emit('graphics', latestMessage);
+        } catch (error) {
+            console.error('Error al procesar el mensaje:', error);
+        }
     });
 
 
-    client.on('message', (topic: string, message: Buffer) => {
-        console.log(`Mensaje recibido del tema${topic}`);
-        const entry = JSON.parse(message.toString())
-        console.log(JSON.parse(message.toString()))
-        io.emit('sensores', entry)
-        console.log(entry);
-
-    })
+    setInterval(() => {
+        console.log('Enviando datos cada diez minutos');
+        io.emit('statistics', latestMessage); 
+    }, tenMinutes);
+    
 
     client.on('error', (err) => {
         console.error('Error en el cliente MQTT:', err);
@@ -35,11 +46,4 @@ export const setUpMqtt = (io: Server) => {
     client.on('close', () => {
         console.log('Conexión cerrada');
     });
-
-
-}
-
-
-
-
-
+};
