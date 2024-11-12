@@ -5,13 +5,12 @@ import dotenv from "dotenv"
 dotenv.config();
 
 export default class EncriptService implements EncriptInterface {
-    hash(password: string): string {
-        return bcrypt.hashSync(
-            password,
-            parseInt(process.env['SALT_ROUNDS'] ?? '5'))
+    async hash(password: string): Promise<string> {
+        const saltRounds = parseInt(process.env['SALT_ROUNDS'] ?? '5');
+        return bcrypt.hash(password, saltRounds);
     }
 
-    compare(hash_password: string, plain_password: string): boolean {
-        return bcrypt.compareSync(plain_password, hash_password)
+    async compare(hash_password: string, plain_password: string): Promise<boolean> {
+        return bcrypt.compare(plain_password, hash_password);
     }
 }

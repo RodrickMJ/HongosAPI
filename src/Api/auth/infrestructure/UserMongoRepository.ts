@@ -45,12 +45,16 @@ export default class UserMongoRepository implements AuthRepository {
 
     async storePasswordResetCode(request: StoragePasswordResetCodeRequest): Promise<void> {
         try {
-            await this.model.updateOne({
-                id: request.userId
+
+  
+           await this.model.updateOne({
+                _id: request.userId
             }, {
                 passwordResetCode: request.code,
                 passwordResetExpires: request.expires
             });
+
+          
 
         } catch (error) {
             console.error('Error storing password reset code:', error);
@@ -77,6 +81,29 @@ export default class UserMongoRepository implements AuthRepository {
         } catch (error) {
             console.error('Error trying to search for user in database:', error);
             throw new Error('Error accessing database');
+        }
+    }
+
+
+  async  findUserByPk(id: string): Promise<Auth | null> {
+        try {
+            
+            const user = await this.model.findById(id);
+            if (!user) return null;
+
+            return {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                password: user.email,
+                rol: user.rol,
+                passwordResetCode: user.passwordResetCode,
+                passwordResetExpires: user.passwordResetExpires
+            }
+
+        } catch (error) {
+            console.error('Error trying to search for user in database:', error);
+            throw new Error('Error accesing database')
         }
     }
 }

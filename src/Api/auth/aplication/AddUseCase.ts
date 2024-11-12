@@ -22,7 +22,7 @@ export default class AddUseCase {
             name: result.name,
             email: result.email,
             rol: result.rol,
-            token: this.tokenService.generateToken(result.name)
+            token: this.tokenService.generateToken(result.id)
         }
 
         return response

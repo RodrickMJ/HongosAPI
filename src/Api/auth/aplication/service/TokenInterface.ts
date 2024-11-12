@@ -1,5 +1,6 @@
 
 export default interface TokenInterface {
-    generateToken(name: string): string;
-    validateToken(token: string): boolean;
+    generateToken(id: string): string;
+    validateToken(id: string): boolean;
+    getPayload(token: string): string | null;
 }

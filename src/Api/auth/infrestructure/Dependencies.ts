@@ -10,6 +10,9 @@ import EmailService from "./Helpers/EmailService";
 import VerificationCodeService from "./Helpers/VerificationCodeService";
 import AddUseCase from "../aplication/AddUseCase";
 import AddController from "./Controllers/AddController";
+import VerifyCodeUseCase from "../aplication/VeryCodeUseCase";
+import VerifyCodeController from "./Controllers/VerifyCodeController";
+import AuthMiddleware from "./middleware/Auth";
 
 const userMongoRepository = new UserMongoRepository(UserModel);
 const encryptService = new EncriptService()
@@ -17,24 +20,22 @@ const tokenService = new TokenService()
 const emailService = new EmailService();
 const verifyCodeService = new VerificationCodeService();
 
-const accessUseCase = new AccessUseCase(
-    tokenService,
-    encryptService,
-    userMongoRepository
-);
-
+const accessUseCase = new AccessUseCase( tokenService, encryptService, userMongoRepository);
 const addUseCase = new AddUseCase(encryptService, tokenService, userMongoRepository)
-
+const verifyCodeUseCase = new VerifyCodeUseCase(userMongoRepository, encryptService, tokenService);
 const findUserForPasswordResetUseCase = new FindUserForPasswordResetUseCase(
     verifyCodeService,
+    encryptService,
     emailService,
     tokenService,
     userMongoRepository
 );
 
+export const authMiddleware = new AuthMiddleware(tokenService);
 
 export const accessController = new AccessController(accessUseCase);
 export const addController = new AddController(addUseCase);
+export const verifyCodeController = new VerifyCodeController(verifyCodeUseCase, tokenService);
 export const findUserForPasswordResetController = new FindUserForPasswordResetController(
     findUserForPasswordResetUseCase
 );

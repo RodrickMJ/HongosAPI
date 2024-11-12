@@ -24,7 +24,7 @@ export default class AccessUseCase {
             email: authFounded.email,
             name: authFounded.name,
             rol: authFounded.rol,
-            token: this.tokenService.generateToken(auth.name)
+            token: this.tokenService.generateToken(authFounded.id)
         }
 
         return response;

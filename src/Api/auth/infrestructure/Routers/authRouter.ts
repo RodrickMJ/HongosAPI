@@ -1,11 +1,18 @@
-import { accessController,findUserForPasswordResetController, addController} from "../Dependencies";
+import {
+    accessController,
+    findUserForPasswordResetController,
+    addController,
+    verifyCodeController,
+    authMiddleware
+} from "../Dependencies";
 import { Router } from "express";
 
-const authRouter = Router();
+const router = Router();
 
-authRouter.post('/access', accessController.run.bind(accessController));
-authRouter.post('/create', addController.run.bind(addController))
-authRouter.post('/send-verification-code', findUserForPasswordResetController.run.bind(findUserForPasswordResetController));
+router.post('/access', accessController.run.bind(accessController));
+router.post('/create', addController.run.bind(addController))
+router.post('/send-verification-code', findUserForPasswordResetController.run.bind(findUserForPasswordResetController));
+router.post('/recive/:code', authMiddleware.run.bind(authMiddleware), verifyCodeController.run.bind(verifyCodeController));
 
 
-export default authRouter;
+export default router;
