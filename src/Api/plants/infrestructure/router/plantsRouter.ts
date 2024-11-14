@@ -10,20 +10,28 @@ import {
 
 const router = Router();
 
-router.get('/', authMiddleware.run.bind(authMiddleware), listController.run.bind(listController));
-router.get('/:id',
+router.get(
+    '/',
+    authMiddleware.run.bind(authMiddleware),
+    listController.run.bind(listController));
+
+router.get(
+    '/:id',
     authMiddleware.run.bind(authMiddleware),
     fieldValidatorMiddleware.pk.bind(fieldValidatorMiddleware),
     getByPkController.run.bind(getByPkController));
 
-router.post('/',
+router.post(
+    '/',
     authMiddleware.run.bind(authMiddleware),
     fieldValidatorMiddleware.add.bind(fieldValidatorMiddleware),
     addController.run.bind(addController));
 
-router.delete('/:id', authMiddleware.run.bind(authMiddleware),
+router.delete(
+    '/:id',
+    authMiddleware.run.bind(authMiddleware),
     fieldValidatorMiddleware.pk.bind(fieldValidatorMiddleware),
-    deleteController.run.bind(deleteController))
+    deleteController.run.bind(deleteController));
 
 
 export default router;

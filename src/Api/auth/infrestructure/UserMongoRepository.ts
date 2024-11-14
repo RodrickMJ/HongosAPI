@@ -106,5 +106,19 @@ export default class UserMongoRepository implements AuthRepository {
             throw new Error('Error accesing database')
         }
     }
+
+   async resetPassword(userId: string, newPassword: string): Promise<void> {
+        try {
+            
+            await this.model.findByIdAndUpdate(userId, {
+                password: newPassword
+            });
+
+        } catch (error) {
+            console.error('Error trying to search for user in database:', error);
+            throw new Error('')
+        }
+    }
+
 }
 

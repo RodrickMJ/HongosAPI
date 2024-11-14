@@ -11,15 +11,13 @@ export default class VerifyCodeController {
         try {
     
             const token = req.headers.authorization as string;
-        
             const {code} = req.params;
 
             if (!code) return res.status(400).json({ msg: 'Reset code is required', data: null });
 
 
             const id = this.tokenService.getPayload(token);
-         
-            if (!id) throw new Error('No se puedo cargar el payload');
+            if (!id) throw new Error('Failed to load payload');
 
             const result = await this.verifyCodeUseCase.run(code, id);
 

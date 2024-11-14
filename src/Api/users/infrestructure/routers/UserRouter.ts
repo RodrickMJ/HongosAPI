@@ -9,15 +9,18 @@ import {
 
 const router = Router();
 
-router.get('/:id',
+router.get(
+    '/:id',
     autMiddleware.run.bind(autMiddleware),
     listController.run.bind(listController));
 
-router.delete('/:id',
+router.delete(
+    '/:id',
     autMiddleware.run.bind(autMiddleware),
     deleteController.run.bind(deleteController));
 
-router.post('/create/:id',
+router.post(
+    '/create/:id',
     fieldValidatorMiddleware.run.bind(fieldValidatorMiddleware),
     autMiddleware.run.bind(autMiddleware),
     addController.run.bind(addController));

@@ -13,6 +13,9 @@ import AddController from "./Controllers/AddController";
 import VerifyCodeUseCase from "../aplication/VeryCodeUseCase";
 import VerifyCodeController from "./Controllers/VerifyCodeController";
 import AuthMiddleware from "./middleware/Auth";
+import ResetPasswordController from "./Controllers/ResetPasswordController";
+import ResetPasswordUseCase from "../aplication/ResetPasswordUseCase";
+
 
 const userMongoRepository = new UserMongoRepository(UserModel);
 const encryptService = new EncriptService()
@@ -23,6 +26,7 @@ const verifyCodeService = new VerificationCodeService();
 const accessUseCase = new AccessUseCase( tokenService, encryptService, userMongoRepository);
 const addUseCase = new AddUseCase(encryptService, tokenService, userMongoRepository)
 const verifyCodeUseCase = new VerifyCodeUseCase(userMongoRepository, encryptService, tokenService);
+const resetPasswordUseCase = new ResetPasswordUseCase(userMongoRepository, encryptService);
 const findUserForPasswordResetUseCase = new FindUserForPasswordResetUseCase(
     verifyCodeService,
     encryptService,
@@ -36,6 +40,7 @@ export const authMiddleware = new AuthMiddleware(tokenService);
 export const accessController = new AccessController(accessUseCase);
 export const addController = new AddController(addUseCase);
 export const verifyCodeController = new VerifyCodeController(verifyCodeUseCase, tokenService);
+export const resetPasswordController = new ResetPasswordController(resetPasswordUseCase, tokenService);
 export const findUserForPasswordResetController = new FindUserForPasswordResetController(
     findUserForPasswordResetUseCase
 );
