@@ -3,6 +3,7 @@ import express from "express";
 import authRouter from "./auth/infrestructure/Routers/authRouter";
 import userRouter from "./users/infrestructure/routers/UserRouter"
 import plantsRouter from './plants/infrestructure/router/plantsRouter'
+import statisticsRouter from './statistics/infrestructure/router/router';
 import cors from "cors";
 import connectToDatabase from "./config/ConectionDatabase";
 
@@ -14,7 +15,8 @@ app.use(express.json());
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-app.use('/plants', plantsRouter )
+app.use('/plants', plantsRouter);
+app.use('/statistics', statisticsRouter);
 
 app.get('/', (_req, res) => { res.send('Hello World')});
 

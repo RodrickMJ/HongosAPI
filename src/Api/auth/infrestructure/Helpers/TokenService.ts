@@ -8,7 +8,8 @@ export default class TokenService implements TokenInterface {
 
    generateToken(id: string): string {
       return jwt.sign({
-         id
+         id,
+         success: true
       },
          process.env['JWT_SECRET'] ?? "DEFAULT_SECRET",
          {
