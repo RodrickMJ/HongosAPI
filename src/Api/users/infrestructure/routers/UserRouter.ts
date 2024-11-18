@@ -10,7 +10,7 @@ import {
 const router = Router();
 
 router.get(
-    '/:id',
+    '/',
     autMiddleware.run.bind(autMiddleware),
     listController.run.bind(listController));
 

@@ -17,7 +17,7 @@ export default class GetPredictionsControllers {
                 });
             }
 
-            const validPredictionTypes = ['week', 'month', 'hours'];
+            const validPredictionTypes = ['week', 'month', 'hours', 'days'];
             if (!validPredictionTypes.includes(typePredictions)) {
                 return res.status(400).json({
                     msg: 'Tipo de predicción inválido',
@@ -37,6 +37,9 @@ export default class GetPredictionsControllers {
         } catch (error) {
 
             console.error("Error al procesar la solicitud de predicciones:", error);
+
+            
+
             return res.status(500).json({
                 msg: 'Error interno del servidor. Por favor, inténtelo más tarde.',
                 data: null

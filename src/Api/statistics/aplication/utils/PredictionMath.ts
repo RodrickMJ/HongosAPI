@@ -5,5 +5,5 @@ export default interface PredictionMathInterface {
     generatePredictions(
         historicalData: dataPoint[],
         trend: { slope: number; intercept: number },
-        type: 'week' | 'month' | 'hours'): dataPoint[]
+        type: 'week' | 'month' | 'hours' | 'days'): dataPoint[]
 }
