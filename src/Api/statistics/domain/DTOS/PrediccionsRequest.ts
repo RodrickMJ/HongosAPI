@@ -4,5 +4,5 @@ export default interface PrediccionsRequest {
     endDate: string,
     idPlant: string
     typeSensor: string
-    typePredictions: 'week' | 'month' | 'hours' | 'days';
+    typePredictions: 'week' | 'hours' | 'days';
 }

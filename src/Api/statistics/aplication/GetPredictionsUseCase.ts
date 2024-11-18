@@ -8,9 +8,9 @@ export default class GetPredictionsUseCase {
         readonly statisticsRepository: StatisticsRepository,
         readonly predictionMath: PredictionMathInterface){}
 
-    async run (request: PrediccionsRequest):Promise<PredictionsResponse>{
+    async run (request: PrediccionsRequest):Promise<PredictionsResponse | null>{
 
-        let historicalData: dataPoint[];
+        let historicalData: dataPoint[] | null;
 
         switch (request.typePredictions){
             case 'week': 
@@ -21,15 +21,22 @@ export default class GetPredictionsUseCase {
                 historicalData = await this.statisticsRepository.getPredictionsByHour(request);
                 break;
 
-            case 'month':
-                historicalData = await this.statisticsRepository.getPredictionsByMonth(request);
+            case 'days':
+                historicalData = await this.statisticsRepository.getPredictionsByDays(request);
                 break;
             
             default :
-            throw new Error('Tipo de predicción no soportado');
+          
+            return null
+       
 
         }
 
+        
+        if (!historicalData || historicalData.length < 2) {
+            return null;
+        }
+        
     
         const trend =  this.predictionMath.calculateTrend(historicalData);
         const predictions = this.predictionMath.generatePredictions(

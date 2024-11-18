@@ -9,7 +9,7 @@ import ReportDataResponse from "../domain/DTOS/ReportDataResponse";
 export default class ReadingsMongoRepository implements StatisticsRepository {
     constructor(readonly model: typeof ReadinsModel) { }
 
-    async getPredictionsByHour(request: PrediccionsRequest): Promise<dataPoint[]> {
+    async getPredictionsByHour(request: PrediccionsRequest): Promise<dataPoint[] | null> {
 
         const result = await this.model.aggregate([
             {
@@ -54,7 +54,7 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
         return result;
     }
 
-    async getPredictionsByWeek(request: PrediccionsRequest): Promise<dataPoint[]> {
+    async getPredictionsByWeek(request: PrediccionsRequest): Promise<dataPoint[] | null> {
         const result = await this.model.aggregate([
             {
                 $match: {
@@ -99,7 +99,7 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
         return result;
     }
 
-    async getPredictionsByMonth(request: PrediccionsRequest): Promise<dataPoint[]> {
+    async getPredictionsByDays(request: PrediccionsRequest): Promise<dataPoint[] | null> {
         const result = await this.model.aggregate([
             {
                 $match: {
@@ -114,7 +114,7 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
                 $group: {
                     _id: {
                         $dateToString: {
-                            format: "%Y-%m",
+                            format: "%Y-%m-%d",
                             date: "$register_date"
                         }
                     },
@@ -139,7 +139,9 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
             }
         ]);
 
+
         return result;
+
     }
 
     async getWeeklyStats(request: ReportDataRequest): Promise<ReportDataResponse[] | null> {
@@ -222,12 +224,12 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
                 $group: {
                     _id: {
                         $dateToString: {
-                            format: "%Y-%m",  
+                            format: "%Y-%m",
                             date: "$register_date"
                         }
                     },
                     avgHydrogen: { $avg: "$hydrogen" },
-                    avgOxigen: { $avg: "$oxigen" },  
+                    avgOxigen: { $avg: "$oxigen" },
                     avgPh: { $avg: "$ph" },
                     avgTemperature: { $avg: "$temperature" },
                     count: { $sum: 1 },
@@ -236,23 +238,23 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
                 }
             },
             {
-                $sort: { "_id": 1 }  
+                $sort: { "_id": 1 }
             }
         ]);
-    
+
         const response: ReportDataResponse[] = result.map(item => ({
             plantId: request.plantId,
             period: item._id,
             averages: {
                 hydrogen: parseFloat(item.avgHydrogen.toFixed(2)),
-                oxygen: parseFloat(item.avgOxigen.toFixed(2)),  
+                oxygen: parseFloat(item.avgOxigen.toFixed(2)),
                 ph: parseFloat(item.avgPh.toFixed(2)),
                 temperature: parseFloat(item.avgTemperature.toFixed(2))
             },
             measurementsCount: item.count,
             reportType: request.reportType
         }));
-    
+
         return response;
     }
 
@@ -301,7 +303,7 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
                 $sort: { "dayDate": 1 }
             }
         ]);
-    
+
         const response: ReportDataResponse[] = result.map(item => ({
             plantId: request.plantId,
             period: item.dayDate,
@@ -314,7 +316,7 @@ export default class ReadingsMongoRepository implements StatisticsRepository {
             measurementsCount: item.count,
             reportType: request.reportType
         }));
-    
+
         return response;
     }
 

@@ -2,6 +2,7 @@ import PredictionMathInterface from "../../aplication/utils/PredictionMath";
 import { dataPoint } from "../../domain/DTOS/PrediccionsResponse";
 
 export default class PredictionMath implements PredictionMathInterface {
+    
     calculateTrend(data: dataPoint[]): { slope: number; intercept: number; } {
         if (data.length < 2) {
             throw new Error("Se necesitan al menos dos puntos de datos para calcular la tendencia");
@@ -120,18 +121,6 @@ export default class PredictionMath implements PredictionMathInterface {
                     nextTime = nextDate.toISOString().split('T')[0];
                     const nextDay = parseInt(nextTime.split('-')[2]);
                     predictedValue = trend.slope * nextDay + trend.intercept;
-                    break;
-                }
-
-                case 'month': {
-                    const [yearStr] = lastDataPoint.time.split('-');
-                    const year = parseInt(yearStr);
-                    let nextMonth = lastTimeValue + i;
-                    const nextYear = year + Math.floor((nextMonth - 1) / 12);
-                    nextMonth = ((nextMonth - 1) % 12) + 1;
-                    
-                    nextTime = `${nextYear}-${nextMonth.toString().padStart(2, '0')}`;
-                    predictedValue = trend.slope * nextMonth + trend.intercept;
                     break;
                 }
 
