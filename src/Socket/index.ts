@@ -7,16 +7,24 @@ import { setUpMqtt } from './mqtt/mqtt';
 import authMiddleware from './middleware/auth';
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: "*",  
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Authorization", "Content-Type"]
+}));
 
 const server = createServer(app);
+
+
 const io = new Server(server, {
   cors: {
     origin: "*", 
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Authorization", "Content-Type"],
+    credentials: true,  
   },
-
-  allowRequest: authMiddleware
+  allowRequest: authMiddleware  
 });
 
 const PORT = parseInt(process.env['PORT'] || '3002');
@@ -31,10 +39,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user has disconnected');
   });
-
 });
-
-
 
 setUpMqtt(io);
 
