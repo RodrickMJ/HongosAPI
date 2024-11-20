@@ -1,14 +1,14 @@
 import client from "../config/MqttConexion";
 import { Server } from "socket.io";
 import SensorsDataRequest from "../interfaces/DTOS/Sensors/DataRequest";
-
+import addReadings from "../controllers/AddReadings";
 const topic = 'BioReact/Sensors';
 
 export const setUpMqtt = (io: Server) => {
     const tenMinutes = 10 * 60 * 1000;
 
     let latestMessage: SensorsDataRequest = {
-        hidrogen: 0, oxygen: 0, ph: 0, temperature: 0
+        hidrogen: 0, oxygen: 0, ph: 0, temperature: 0, id_plant: ''
     };
 
     client.on('connect', () => {
@@ -37,8 +37,15 @@ export const setUpMqtt = (io: Server) => {
     });
 
 
-    setInterval(() => {
+     setInterval(async() => {
         console.log('Enviando datos cada diez minutos');
+        await addReadings({
+            hydrogen: latestMessage.hidrogen,
+            id_plant: latestMessage.id_plant,
+            oxigen: latestMessage.oxygen,
+            ph: latestMessage.ph,
+            temperature: latestMessage.temperature
+        });
         io.emit('statistics', latestMessage);
     }, tenMinutes);
 

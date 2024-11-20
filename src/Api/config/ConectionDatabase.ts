@@ -16,6 +16,7 @@ export default async function connectToDatabase() {
         console.log('Database connected successfully');
        
     } catch (error) {
+        console.log(error)
         handleDatabaseError(error);
     }
 }
