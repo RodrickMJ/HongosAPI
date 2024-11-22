@@ -34,29 +34,25 @@ export const setUpMqtt = (io: Server) => {
 
     client.on('message', async (topic: string, message: Buffer) => {
         try {
-            // Parsear el mensaje recibido
             const parsedMessage: SensorsDataRequest = JSON.parse(message.toString());
             latestMessage = parsedMessage;
             console.log('Mensaje recibido:', latestMessage);
 
-            // Emitir datos originales para la UI
             io.emit('graphics', latestMessage);
 
-            // Guardar datos originales en la base de datos
+
             await axios.post('http://localhost:3000/sensors/readings', latestMessage);
             console.log('Datos originales guardados en la base de datos');
 
-            // Realizar cálculos
+
             const calculatedConditions = calculateConditions(latestMessage);
 
-            // Emitir cálculos como evento de estadísticas
+
             io.emit('statistics', calculatedConditions);
 
-            // Guardar cálculos en la base de datos
             await axios.post('http://localhost:3000/statistics/', calculatedConditions);
             console.log('Cálculos guardados en la base de datos');
 
-            // Generar predicciones para rangos de tiempo
             const timeRanges = ['hour', 'day', 'week'];
             for (const timeRange of timeRanges) {
                 const predictionData = { ...calculatedConditions, timeRange };
@@ -77,7 +73,7 @@ export const setUpMqtt = (io: Server) => {
     });
 };
 
-// Función para realizar cálculos
+
 const calculateConditions = (data: SensorsDataRequest) => {
     const averageTemperature = (data.temp1 + data.temp2 + data.temp3) / 3;
     const averageHumidity = (data.hum1 + data.hum2 + data.hum3) / 3;

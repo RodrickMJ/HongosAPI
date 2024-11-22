@@ -44,5 +44,5 @@ io.on('connection', (socket) => {
 setUpMqtt(io);
 
 server.listen(PORT, () => {
-  console.log(`server running at http://44.221.253.147:${PORT}`);
+  console.log(`server running at http://localhost:${PORT}`);
 });

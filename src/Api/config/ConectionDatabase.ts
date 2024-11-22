@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import 'dotenv/config';
 
-const MONGODB_HOST = process.env['MONGODB_HOST'] || '';
-const PORT_DATABASE = process.env['PORT_DATABASE'] || '';
-const MONGODB_DATABASE = process.env['NAME_DATABASE'] || '';
+const MONGODB_HOST = process.env['MONGODB_HOST'] || '18.214.210.145';
+const PORT_DATABASE = process.env['PORT_DATABASE'] || '27017';
+const MONGODB_DATABASE = process.env['NAME_DATABASE'] || 'HongosHD';
 
 const MongoUrl = `mongodb://${MONGODB_HOST}:${PORT_DATABASE}/${MONGODB_DATABASE}`;
 
