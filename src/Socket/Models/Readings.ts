@@ -1,28 +1,64 @@
-import mongoose,{Schema, ObjectId} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import Ireadings from "../interfaces/database/Readings";
 
-const readinsSchema = new Schema<Ireadings>({
+const readingsSchema = new Schema<Ireadings>({
     id_plant: {
         type: Schema.Types.ObjectId,
-        ref: 'Plants'
+        ref: 'Plants',
+        required: true
     },
 
-    hydrogen: {
+    luz1: {
         type: Number,
         required: true
     },
 
-    oxigen: {
+    luz2: {
         type: Number,
         required: true
     },
 
-    ph: {
+    temp1: {
         type: Number,
-        required: true,
+        required: true
     },
 
-    temperature: {
+    hum1: {
+        type: Number,
+        required: true
+    },
+
+    temp2: {
+        type: Number,
+        required: true
+    },
+
+    hum2: {
+        type: Number,
+        required: true
+    },
+
+    temp3: {
+        type: Number,
+        required: true
+    },
+
+    hum3: {
+        type: Number,
+        required: true
+    },
+
+    mq2_value: {
+        type: Number,
+        required: true
+    },
+
+    mq2_voltage: {
+        type: Number,
+        required: true
+    },
+
+    distancia: {
         type: Number,
         required: true
     },
@@ -31,7 +67,6 @@ const readinsSchema = new Schema<Ireadings>({
         type: Date,
         default: Date.now
     }
-
 });
 
-export const ReadinsModel = mongoose.model('Readings', readinsSchema)
+export const ReadingsModel = mongoose.model('Readings', readingsSchema);
