@@ -4,7 +4,6 @@ import { createServer } from "node:http";
 import { Server } from "socket.io";
 import cors from "cors";
 import { setUpMqtt } from './mqtt/mqtt';
-import authMiddleware from './middleware/auth';
 
 const app = express();
 
@@ -16,7 +15,6 @@ app.use(cors({
 
 const server = createServer(app);
 
-
 const io = new Server(server, {
   cors: {
     origin: "*", 
@@ -24,13 +22,12 @@ const io = new Server(server, {
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,  
   },
-  allowRequest: authMiddleware  
 });
 
 const PORT = parseInt(process.env['PORT'] || '3002');
 
 app.get('/', (_req, res) => {
-  res.send('Hola mundo');
+  res.send('Hola mundo websocket');
 });
 
 io.on('connection', (socket) => {

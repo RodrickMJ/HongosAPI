@@ -1,13 +1,22 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-const trendSchema = new Schema({
-    id_plant: { type: String, required: true },
-    temperatureTrend: { type: Number, required: true },
-    humidityTrend: { type: Number, required: true },
-    lightTrend: { type: Number, required: true },
-    timestamp: { type: Date, default: Date.now },
-});
+interface Trend {
+    id_plant: string;
+    metric: string;
+    trend: "increasing" | "decreasing" | "stable";
+    rateOfChange: number;
+    createdAt?: Date;
+}
 
-const TrendModel = model('Trend', trendSchema);
+const TrendSchema = new Schema<Trend>(
+    {
+        id_plant: { type: String, required: true },
+        metric: { type: String, required: true },
+        trend: { type: String, required: true, enum: ["increasing", "decreasing", "stable"] },
+        rateOfChange: { type: Number, required: true },
+        createdAt: { type: Date, default: Date.now },
+    },
+    { timestamps: true }
+);
 
-export { TrendModel };
+export default model<Trend>("Trend", TrendSchema);

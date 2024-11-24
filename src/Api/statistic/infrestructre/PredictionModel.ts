@@ -12,6 +12,8 @@ const PredictionSchema = new Schema<Prediction>(
         waterLevelStatus: { type: String, required: true },
         mq2_value: { type: Number, required: true },
         distancia: { type: Number, required: true },
+        temperatureProbability: { type: Number, required: false }, // Nuevo campo
+        humidityProbability: { type: Number, required: false },   // Nuevo campo
         createdAt: { type: Date, default: Date.now },
     },
     { timestamps: true }

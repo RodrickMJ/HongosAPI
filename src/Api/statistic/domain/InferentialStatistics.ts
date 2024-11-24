@@ -1,6 +1,8 @@
-export interface Prediction {
+import { Document } from 'mongoose';
+
+// Extender de Document para ser compatible con Mongoose
+export interface InferentialStatistics extends Document {
     id_plant: string;
-    timeRange: "hour" | "day" | "week";
     averageTemperature: number;
     averageHumidity: number;
     averageLight: number;
@@ -9,8 +11,5 @@ export interface Prediction {
     mq2_value: number;
     distancia: number;
     createdAt?: Date;
-
-    // Nuevos campos
-    temperatureProbability?: number;
-    humidityProbability?: number;
+    updatedAt?: Date;
 }

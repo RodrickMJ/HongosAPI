@@ -9,6 +9,8 @@ import plantsRouter from './plants/infrestructure/router/plantsRouter';
 import router from './readData/infrastructure/routers/SensorRouter';
 import routerStat from './statistic/infrestructre/StatisticRouter';
 import routerPred from './statistic/infrestructre/predictionsRoter';
+import routerTendencias from './statistic/infrestructre/TrendsRouter';
+import routerInferential from './statistic/infrestructre/inferentialStatisticsRoutes';
 
 const Port = parseInt(process.env['APP_PORT'] ?? '3001');
 const app = express();
@@ -23,8 +25,10 @@ app.use('/plants', plantsRouter);
 app.use('/sensors', router);
 app.use('/statistics', routerStat);
 app.use('/predictions', routerPred)
+app.use('/trends', routerTendencias);
+app.use('/inferential', routerInferential);
 
-app.get('/', (_req, res) => res.send('Hello World'));
+app.get('/', (_req, res) => res.send('Hello World API'));
 
 async function startServer() {
     try {

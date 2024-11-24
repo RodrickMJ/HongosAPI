@@ -22,11 +22,16 @@ routerPred.get("/predictions/:id_plant", async (req, res) => {
     try {
         const { id_plant } = req.params;
         const predictions = await PredictionModel.find({ id_plant });
-        res.status(200).json(predictions);
+        res.status(200).json(predictions.map(pred => ({
+            ...pred.toObject(),
+            probabilities: {
+                temperature: pred.temperatureProbability,
+                humidity: pred.humidityProbability,
+            }
+        })));
     } catch (error) {
         res.status(500).json({ error: error });
     }
 });
-
 
 export default routerPred;

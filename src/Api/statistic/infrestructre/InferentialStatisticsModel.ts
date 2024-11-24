@@ -1,15 +1,19 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
+import { InferentialStatistics } from '../domain/InferentialStatistics';
 
-const inferentialStatsSchema = new Schema({
-    id_plant: { type: String, required: true },
-    tTestResult: { type: Number, required: true },
-    confidenceInterval: {
-        lowerBound: { type: Number, required: true },
-        upperBound: { type: Number, required: true },
+// Definir el esquema de Mongoose para InferentialStatistics
+const InferentialStatisticsSchema = new Schema<InferentialStatistics>(
+    {
+        id_plant: { type: String, required: true },
+        averageTemperature: { type: Number, required: true },
+        averageHumidity: { type: Number, required: true },
+        averageLight: { type: Number, required: true },
+        airQuality: { type: String, required: true },
+        waterLevelStatus: { type: String, required: true },
+        mq2_value: { type: Number, required: true },
+        distancia: { type: Number, required: true },
     },
-    timestamp: { type: Date, default: Date.now },
-});
+    { timestamps: true } 
+);
 
-const InferentialStatisticsModel = model('InferentialStatistics', inferentialStatsSchema);
-
-export { InferentialStatisticsModel };
+export default model<InferentialStatistics>("InferentialStatistics", InferentialStatisticsSchema);
