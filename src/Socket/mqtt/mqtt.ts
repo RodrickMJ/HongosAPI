@@ -2,7 +2,7 @@ import client from '../config/MqttConexion';
 import { Server } from 'socket.io';
 import { calculateConditions } from './calculations';
 import { handleAlerts } from './alerts';
-import { SensorsDataRequest } from '../interfaces/DTOS/Sensors/DataRequest';
+import SensorsDataRequest from '../interfaces/DTOS/Sensors/DataRequest';
 import axios from 'axios';
 
 const topic = 'TopicsMQTT';
@@ -75,7 +75,7 @@ setInterval(async () => {
 
         // Enviar cálculos a la base de datos
         try {
-            await axios.post('http://localhost:3000/statistics/', calculatedConditions);
+            await axios.post('http://44.221.253.147:3000/statistics/', calculatedConditions);
             console.log('Cálculos guardados en la base de datos:', calculatedConditions);
         } catch (error) {
             console.error('Error al guardar los cálculos:', error);
@@ -101,7 +101,7 @@ setInterval(async () => {
         };
 
         try {
-            await axios.post('http://localhost:3000/inferential/', reducedConditions);
+            await axios.post('http://44.221.253.147:3000/inferential/', reducedConditions);
             console.log('Cálculos inferenciales guardados con éxito');
         } catch (error) {
             console.error('Error al guardar cálculos inferenciales:', error);
@@ -111,7 +111,7 @@ setInterval(async () => {
         for (const timeRange of timeRanges) {
             const predictionData = { ...reducedConditions, timeRange };
             try {
-                await axios.post('http://localhost:3000/predictions/', predictionData);
+                await axios.post('http://44.221.253.147:3000/predictions/', predictionData);
                 console.log(`Predicción (${timeRange}) guardada en la base de datos`);
             } catch (error) {
                 console.error('Error al guardar predicción:', error);
@@ -158,11 +158,11 @@ export const setUpMqtt = (io: Server) => {
             io.emit('graphics', parsedMessage);
 
             // Guardar los datos originales en la base de datos
-            await axios.post('http://localhost:3000/sensors/readings', parsedMessage);
+            await axios.post('http://44.221.253.147:3000/sensors/readings', parsedMessage);
             console.log('Datos originales guardados en la base de datos');
 
             // Guardar tendencias
-            await axios.post("http://localhost:3000/trends/", parsedMessage);
+            await axios.post("http://44.221.253.147:3000/trends/", parsedMessage);
             console.log('Cálculos de tendencias realizados con éxito');
         } catch (error) {
             console.error('Error procesando el mensaje:', error);

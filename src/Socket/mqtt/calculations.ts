@@ -1,4 +1,4 @@
-import { SensorsDataRequest } from "../interfaces/DTOS/Sensors/DataRequest";
+import SensorsDataRequest from "../interfaces/DTOS/Sensors/DataRequest";
 
 const dataBuffer: Record<string, SensorsDataRequest[]> = {};
 
