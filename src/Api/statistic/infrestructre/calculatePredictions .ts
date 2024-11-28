@@ -5,7 +5,7 @@ import PredictionModel from "./PredictionModel";
 const calculateProbability = (values: number[], targetValue: number, tolerance: number = 0.1): number => {
     const total = values.length;
     const matches = values.filter(value => Math.abs(value - targetValue) <= tolerance).length;
-    return total > 0 ? (matches / total) * 100 : 0; // Porcentaje de ocurrencia
+    return total > 0 ? (matches / total) * 100 : 0; 
 };
 
 const calculatePredictions = async (id_plant: string, timeRange: "hour" | "day" | "week") => {

@@ -9,16 +9,58 @@ export class StatisticController {
         private addStatisticUseCase: AddStatisticUseCase,
         private getStatisticsUseCase: GetStatisticsUseCase,
         private getStatisticByPlantUseCase: GetStatisticByPlantUseCase
-    ) {}
+    ) { }
 
     async addStatistic(req: Request, res: Response): Promise<void> {
         try {
-            await this.addStatisticUseCase.execute(req.body);
+            const {
+                id_plant,
+                averageTemperature,
+                maxTemperature,
+                minTemperature,
+                stdDevTemperature,
+                averageHumidity,
+                maxHumidity,
+                minHumidity,
+                stdDevHumidity,
+                averageLight,
+                maxLight,
+                minLight,
+                stdDevLight,
+                airQuality,
+                waterLevelStatus,
+                mq2_value,
+                distancia,
+            } = req.body;
+
+            const statistic = {
+                id_plant,
+                averageTemperature,
+                maxTemperature,
+                minTemperature,
+                stdDevTemperature,
+                averageHumidity,
+                maxHumidity,
+                minHumidity,
+                stdDevHumidity,
+                averageLight,
+                maxLight,
+                minLight,
+                stdDevLight,
+                airQuality,
+                waterLevelStatus,
+                mq2_value,
+                distancia,
+            };
+
+            await this.addStatisticUseCase.execute(statistic);
             res.status(201).json({ message: "Statistic added successfully" });
         } catch (error) {
             res.status(500).json({ error: error });
         }
     }
+
+
 
     async getStatistics(_: Request, res: Response): Promise<void> {
         try {

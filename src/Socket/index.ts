@@ -20,7 +20,6 @@ const io = new Server(server, {
     origin: "*", 
     methods: ["GET", "POST"],
     allowedHeaders: ["Authorization", "Content-Type"],
-    credentials: true,  
   },
 });
 

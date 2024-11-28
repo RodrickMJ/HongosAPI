@@ -1,32 +1,54 @@
 import SensorsDataRequest from "../domain/SensorDataRequest";
 
-interface Trend {
-    metric: string;
-    trend: "increasing" | "decreasing" | "stable";
-    rateOfChange: number;
-}
+const calculateBinomialCoefficient = (n: number, k: number): number => {
+    if (k > n) return 0;
+    let result = 1;
+    for (let i = 1; i <= k; i++) {
+        result = (result * (n - i + 1)) / i;
+    }
+    return result;
+};
 
-// Servicio para calcular tendencias
-export const calculateTrends = (currentData: SensorsDataRequest, previousData: SensorsDataRequest | null): Trend[] => {
-    if (!previousData) {
-        return []; // Si no hay datos previos, no se pueden calcular tendencias.
+// Función para calcular la probabilidad binomial
+const calculateBinomialProbability = (n: number, k: number, p: number): number => {
+    const binomialCoefficient = calculateBinomialCoefficient(n, k);
+    return binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
+};
+
+// Servicio para calcular tendencias en un lote de datos
+export const calculateBatchTrends = (batchData: SensorsDataRequest[]) => {
+    const trends: any[] = [];
+
+    const metrics = Object.keys(batchData[0]) as (keyof SensorsDataRequest)[];
+
+    for (const metric of metrics) {
+        if (metric !== "id_plant") {
+            const values = batchData.map(data => data[metric] as number).filter(v => v !== undefined);
+
+            if (values.length > 0) {
+                const max = Math.max(...values);
+                const min = Math.min(...values);
+
+              
+                const n = values.length;
+                const k = values.filter(v => v > 0).length; 
+                const p = k / n;
+                const binomialProbability = calculateBinomialProbability(n, k, p);
+
+  
+                const rateOfChange = (values[values.length - 1] - values[0]) / values.length;
+
+                trends.push({
+                    metric,
+                    trend: rateOfChange > 0 ? "increasing" : rateOfChange < 0 ? "decreasing" : "stable",
+                    rateOfChange,
+                    max,
+                    min,
+                    binomial: binomialProbability,
+                });
+            }
+        }
     }
 
-    const metrics = [
-        { name: "temperature", current: (currentData.temp1 + currentData.temp2 + currentData.temp3) / 3, previous: (previousData.temp1 + previousData.temp2 + previousData.temp3) / 3 },
-        { name: "humidity", current: (currentData.hum1 + currentData.hum2 + currentData.hum3) / 3, previous: (previousData.hum1 + previousData.hum2 + previousData.hum3) / 3 },
-        { name: "light", current: (currentData.luz1 + currentData.luz2) / 2, previous: (previousData.luz1 + previousData.luz2) / 2 },
-        { name: "mq2_value", current: currentData.mq2_value, previous: previousData.mq2_value },
-        { name: "distance", current: currentData.distancia, previous: previousData.distancia },
-    ];
-
-    return metrics.map(metric => {
-        const rateOfChange = metric.current - metric.previous;
-        const trend =
-            rateOfChange > 0.5 ? "increasing" :
-            rateOfChange < -0.5 ? "decreasing" :
-            "stable";
-        
-        return { metric: metric.name, trend, rateOfChange };
-    });
+    return trends;
 };

@@ -5,7 +5,6 @@ import connectToDatabase from './config/ConectionDatabase';
 import authRouter from './auth/infrestructure/Routers/authRouter';
 import userRouter from './users/infrestructure/routers/UserRouter';
 import plantsRouter from './plants/infrestructure/router/plantsRouter';
-// import statisticsRouter from './statistics/infrestructure/router/router';
 import router from './readData/infrastructure/routers/SensorRouter';
 import routerStat from './statistic/infrestructre/StatisticRouter';
 import routerPred from './statistic/infrestructre/predictionsRoter';
@@ -21,7 +20,6 @@ app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/plants', plantsRouter);
-// app.use('/statistics', statisticsRouter);
 app.use('/sensors', router);
 app.use('/statistics', routerStat);
 app.use('/predictions', routerPred)

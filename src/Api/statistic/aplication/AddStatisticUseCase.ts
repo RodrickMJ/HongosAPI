@@ -1,6 +1,6 @@
 // AddStatisticUseCase.ts
-import { Statistic } from "../domain/Statistic";
 import { StatisticRepository } from "../domain/StatisticRepository";
+import { Statistic } from "../domain/Statistic";
 
 export class AddStatisticUseCase {
     constructor(private statisticRepository: StatisticRepository) {}
