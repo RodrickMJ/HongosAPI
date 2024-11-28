@@ -1,4 +1,4 @@
-export interface SensorsDataRequest {
+export default interface SensorsDataRequest {
     id_plant: string;
     temp1: number;
     temp2: number;
